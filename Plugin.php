@@ -66,7 +66,7 @@ class Tp2MD_Plugin implements Typecho_Plugin_Interface
         <p>
             使用方法：设置好插件后访问 <mark><?php Helper::options()->index('/Tp2MD?action=save&key=[KEY]'); ?></mark> 即可。记住将 [KEY]
             替换为插件中的设置的值。<br>
-            <mark>请保证 插件目录/cache 文件夹可写</mark>
+            <mark>请保证 插件目录/output 文件夹可写</mark>
         </p>
         <?php
         $t = new Typecho_Widget_Helper_Form_Element_Select(
@@ -113,7 +113,7 @@ class Tp2MD_Plugin implements Typecho_Plugin_Interface
 
         // 创建路径
         $d = date('Y-m-d-H-i-s');
-        $pathBase = __DIR__ . '/cache/' . $d;
+        $pathBase = __DIR__ . '/output/' . $d;
         mkdir($pathBase);
         $pagePath = $pathBase . '/page/';
         mkdir($pagePath);
@@ -135,7 +135,7 @@ class Tp2MD_Plugin implements Typecho_Plugin_Interface
             $front_matter = array(
                 'layout' => $row['type'],
                 'cid' => $row['cid'],
-                'title' => $row['title'],
+                'title' => '"' . $row['title'] . '"',
                 'slug' => $row['slug'],
                 'date' => date('Y/m/d H:i:s', $row['created']),
                 'updated' => date('Y/m/d H:i:s', $row['modified']),
@@ -145,7 +145,7 @@ class Tp2MD_Plugin implements Typecho_Plugin_Interface
             // 作者
             $author = $db->fetchRow($db->select()->from('table.users')
                 ->where('table.users.uid = ?', $row['authorId']));
-            $front_matter['author'] = $author['screenName'];
+            $front_matter['author'] = '"' . $author['screenName'] . '"';
 
             // 分类与标签
             $cates = array();
@@ -197,7 +197,7 @@ class Tp2MD_Plugin implements Typecho_Plugin_Interface
             $filePath .= $fileName;
 
             if (!file_put_contents($filePath, $output)) {
-                echo '不能写入文件，请检查 cache 文件夹权限！';
+                echo '不能写入文件，请检查 output 文件夹权限！';
                 die();
             }
         }
