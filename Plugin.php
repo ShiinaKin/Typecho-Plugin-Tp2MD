@@ -133,13 +133,13 @@ class Tp2MD_Plugin implements Typecho_Plugin_Interface
         foreach ($rows as $row) {
             // 建立 yaml front matter
             $front_matter = array(
-                'layout' => $row['type'],
+                'layout' => '"' . $row['type'] . '"',
                 'cid' => $row['cid'],
                 'title' => '"' . $row['title'] . '"',
-                'slug' => $row['slug'],
+                'slug' => '"' . $row['slug'] . '"',
                 'date' => date('Y/m/d H:i:s', $row['created']),
                 'updated' => date('Y/m/d H:i:s', $row['modified']),
-                'status' => $row['status']
+                'status' => '"' . $row['status'] . '"'
             );
 
             // 作者
